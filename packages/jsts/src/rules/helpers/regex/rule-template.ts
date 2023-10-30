@@ -25,7 +25,6 @@ import { isStringRegexMethodCall } from './ast';
 import { getParsedRegex } from './extract';
 import { getRegexpLocation } from './location';
 import { isRequiredParserServices } from '..';
-import { Change } from 'diff';
 
 /**
  * Rule context for regex rules that also includes the original ESLint node
@@ -62,25 +61,20 @@ export function createRegExpRule(
         ? context.parserServices
         : null;
 
-      function checkRegex(
-        node: estree.Node,
-        regExpAST: { regex: regexpp.AST.RegExpLiteral; parseDiff: Change[] } | null,
-      ) {
+      function checkRegex(node: estree.Node, regExpAST: regexpp.AST.RegExpLiteral | null) {
         if (!regExpAST) {
           return;
         }
         const ctx = Object.create(context) as RegexRuleContext;
         ctx.node = node;
-        ctx.reportRegExpNode = reportRegExpNode(regExpAST.parseDiff);
-        regexpp.visitRegExpAST(regExpAST.regex, handlers(ctx));
+        ctx.reportRegExpNode = reportRegExpNode;
+        regexpp.visitRegExpAST(regExpAST, handlers(ctx));
       }
 
-      function reportRegExpNode(diff: Change[]) {
-        return function (descriptor: RegexReportDescriptor) {
-          const { node, regexpNode, offset = [0, 0], ...rest } = descriptor;
-          const loc = getRegexpLocation(node, regexpNode, context, offset, diff);
-          context.report({ ...rest, loc });
-        };
+      function reportRegExpNode(descriptor: RegexReportDescriptor) {
+        const { node, regexpNode, offset = [0, 0], ...rest } = descriptor;
+        const loc = getRegexpLocation(node, regexpNode, context, offset);
+        context.report({ ...rest, loc });
       }
 
       function checkLiteral(literal: estree.Literal) {

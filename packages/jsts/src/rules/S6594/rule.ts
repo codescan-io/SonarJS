@@ -45,7 +45,7 @@ export const rule: Rule.RuleModule = {
             return;
           }
           const callExpr = (memberExpr as any).parent as estree.CallExpression;
-          const regex = getParsedRegex(callExpr.arguments[0], context)?.regex;
+          const regex = getParsedRegex(callExpr.arguments[0], context);
           if (regex?.flags.global) {
             return;
           }

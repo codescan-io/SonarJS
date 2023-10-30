@@ -327,7 +327,7 @@ class RegexIntelliSense {
       /* implicit regex */
       regexNode = node.arguments[0];
     }
-    const regex = getParsedRegex(regexNode, this.context)?.regex;
+    const regex = getParsedRegex(regexNode, this.context);
     if (regex) {
       this.knowledge.push(makeRegexKnowledge(regexNode, regex));
     }

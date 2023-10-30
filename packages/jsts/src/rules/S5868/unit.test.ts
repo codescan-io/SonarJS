@@ -316,8 +316,11 @@ ruleTester.run('', rule, {
       errors: surrogatePair('👍', 'var r = new RegExp(String.raw`[👍]`, String.raw`iu`)'),
     },
     {
-      code: `var r = new RegExp("[\\uD83D\\uDC4D]", "")`,
-      errors: surrogatePair('\\uD83D\\uDC4D', `var r = new RegExp("[\\uD83D\\uDC4D]", "u")`),
+      code: String.raw`var r = new RegExp("[\\uD83D\\uDC4D]", "")`,
+      errors: surrogatePair(
+        '\\uD83D\\uDC4D',
+        String.raw`var r = new RegExp("[\\uD83D\\uDC4D]", "u")`,
+      ),
     },
     {
       code: String.raw`var r = new RegExp("/(?<=[👍])", "")`,
@@ -338,11 +341,11 @@ ruleTester.run('', rule, {
       errors: [{ message: modifiedEmoji('👶🏻') }],
     },
     {
-      code: `var r = new RegExp("[\\uD83D\\uDC76\\uD83C\\uDFFB]", "u")`,
+      code: String.raw`var r = new RegExp("[\\uD83D\\uDC76\\uD83C\\uDFFB]", "u")`,
       errors: [{ message: modifiedEmoji('\\uD83D\\uDC76\\uD83C\\uDFFB') }],
     },
     {
-      code: `var r = new RegExp("[\\u{1F476}\\u{1F3FB}]", "u")`,
+      code: String.raw`var r = new RegExp("[\\u{1F476}\\u{1F3FB}]", "u")`,
       errors: [{ message: modifiedEmoji('\\u{1F476}\\u{1F3FB}') }],
     },
     {
@@ -374,11 +377,11 @@ ruleTester.run('', rule, {
       errors: [{ message: regionalIndicator('🇯🇵') }],
     },
     {
-      code: `var r = new RegExp("[\\uD83C\\uDDEF\\uD83C\\uDDF5]", "u")`,
+      code: String.raw`var r = new RegExp("[\\uD83C\\uDDEF\\uD83C\\uDDF5]", "u")`,
       errors: [{ message: regionalIndicator('\\uD83C\\uDDEF\\uD83C\\uDDF5') }],
     },
     {
-      code: `var r = new RegExp("[\\u{1F1EF}\\u{1F1F5}]", "u")`,
+      code: String.raw`var r = new RegExp("[\\u{1F1EF}\\u{1F1F5}]", "u")`,
       errors: [{ message: regionalIndicator('\\u{1F1EF}\\u{1F1F5}') }],
     },
     {

@@ -20,8 +20,9 @@
 import { AST, Rule } from 'eslint';
 import * as estree from 'estree';
 import * as regexpp from '@eslint-community/regexpp';
-import { isRegexLiteral, isStringLiteral } from '../';
-import { Change } from 'diff';
+import { isRegexLiteral, isStringLiteral, StringLiteral } from '../';
+import { diffChars } from 'diff';
+import { unquote } from './extract';
 
 /**
  * Gets the regexp node location in the ESLint referential
@@ -29,7 +30,6 @@ import { Change } from 'diff';
  * @param regexpNode the regexp regex node
  * @param context the rule context
  * @param offset an offset to apply on the location
- * @param parseDiff difference between code and parsed regex
  * @returns the regexp node location in the ESLint referential
  */
 export function getRegexpLocation(
@@ -37,7 +37,6 @@ export function getRegexpLocation(
   regexpNode: regexpp.AST.Node,
   context: Rule.RuleContext,
   offset = [0, 0],
-  parseDiff: Change[] = [],
 ): AST.SourceLocation {
   let loc: AST.SourceLocation;
   if (isRegexLiteral(node) || isStringLiteral(node)) {
@@ -46,29 +45,9 @@ export function getRegexpLocation(
     let startIndex = start + regexpNode.start + offset[0];
     let endIndex = start + regexpNode.end + offset[1];
 
-    let index = start;
-    for (const change of parseDiff) {
-      if (change.removed) {
-        if (startIndex >= index) {
-          startIndex += change.value.length;
-        }
-        if (endIndex > index) {
-          endIndex += change.value.length;
-        }
-      } else if (change.added) {
-        index += change.value.length;
-        if (startIndex >= index) {
-          startIndex -= change.value.length;
-        }
-        if (endIndex > index) {
-          endIndex -= change.value.length;
-        }
-      } else {
-        // Chunk was both in input and output
-        index += change.value.length;
-      }
+    if (isStringLiteral(node)) {
+      [startIndex, endIndex] = fixLocation(node, start, startIndex, endIndex);
     }
-
     loc = {
       start: source.getLocFromIndex(startIndex),
       end: source.getLocFromIndex(endIndex),
@@ -77,4 +56,35 @@ export function getRegexpLocation(
     loc = node.loc!;
   }
   return loc;
+}
+
+function fixLocation(node: StringLiteral, start: number, startIndex: number, endIndex: number) {
+  const pattern = unquote(node.raw as string);
+  const regex = regexpp.parseRegExpLiteral(new RegExp(unquote(node.value as string), ''));
+  const parseDiff = diffChars(pattern, regex.pattern.raw);
+  let index = start;
+  if (parseDiff.length === 2 && parseDiff[0].removed && parseDiff[1].added)
+    return [startIndex, endIndex];
+  for (const change of parseDiff) {
+    if (change.removed) {
+      if (startIndex >= index) {
+        startIndex += change.value.length;
+      }
+      if (endIndex > index) {
+        endIndex += change.value.length;
+      }
+    } else if (change.added) {
+      index += change.value.length;
+      if (startIndex >= index) {
+        startIndex -= change.value.length;
+      }
+      if (endIndex > index) {
+        endIndex -= change.value.length;
+      }
+    } else {
+      // Chunk was both in input and output
+      index += change.value.length;
+    }
+  }
+  return [startIndex, endIndex];
 }
