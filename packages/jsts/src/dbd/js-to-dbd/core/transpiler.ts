@@ -24,11 +24,16 @@ import { createReference } from './values/reference';
 import { createParameter } from './values/parameter';
 import { createContext } from './context-manager';
 import { createBlockManager } from './block-manager';
+import { RequiredParserServices } from '../../../rules/helpers';
 
-export type Transpiler = (ast: TSESTree.Program, fileName: string) => Array<FunctionInfo>;
+export type Transpiler = (
+  ast: TSESTree.Program,
+  fileName: string,
+  services: RequiredParserServices,
+) => Array<FunctionInfo>;
 
 export const createTranspiler = (hostDefinedProperties: Array<Variable> = []): Transpiler => {
-  return (program, fileName) => {
+  return (program, fileName, services: RequiredParserServices) => {
     const functionInfos: Array<FunctionInfo> = [];
 
     const processFunctionInfo: ScopeManager['processFunctionInfo'] = (
@@ -142,7 +147,7 @@ export const createTranspiler = (hostDefinedProperties: Array<Variable> = []): T
       const { getCurrentBlock, pushBlock } = blockManager;
 
       const handleStatement = (statement: TSESTree.Statement) => {
-        return _handleStatement(statement, context, fileName);
+        return _handleStatement(statement, context, fileName, services);
       };
 
       rootBlock.instructions.push(instruction);

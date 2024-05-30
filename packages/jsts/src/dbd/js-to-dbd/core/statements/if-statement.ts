@@ -12,6 +12,7 @@ export const handleIfStatement: StatementHandler<TSESTree.IfStatement> = (
   node,
   context,
   fileName,
+  services,
 ) => {
   const { consequent, alternate, test } = node;
   const { blockManager, scopeManager } = context;
@@ -46,7 +47,7 @@ export const handleIfStatement: StatementHandler<TSESTree.IfStatement> = (
 
     pushBlock(block);
 
-    handleStatement(innerNode, context, fileName);
+    handleStatement(innerNode, context, fileName, services);
 
     shiftScope();
     if (!isTerminated(getCurrentBlock())) {

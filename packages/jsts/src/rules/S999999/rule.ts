@@ -23,7 +23,7 @@ import { Rule } from 'eslint';
 import { writeFileSync } from 'fs';
 import { mkdirpSync } from 'mkdirp';
 import { functionInto2Text } from '../../dbd/helpers';
-import { createTranspiler, serialize } from '../../dbd/js-to-dbd';
+import { createTranspiler, serialize } from '../../dbd';
 import { dirname, join } from 'path';
 import { TSESTree } from '@typescript-eslint/utils';
 import { FunctionInfo } from '../../dbd/ir-gen/ir_pb';
@@ -44,9 +44,9 @@ export const rule: Rule.RuleModule = {
     if (!print) {
       mkdirpSync(outputDir);
     }
-    const { ast } = context.sourceCode;
+    const { ast, parserServices: services } = context.sourceCode;
     const transpile = createTranspiler(root);
-    const functionInfos = transpile(ast as TSESTree.Program, context.filename);
+    const functionInfos = transpile(ast as TSESTree.Program, context.filename, services);
 
     const saveResults = (
       result: FunctionInfo,

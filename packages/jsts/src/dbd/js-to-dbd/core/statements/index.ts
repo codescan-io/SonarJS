@@ -4,10 +4,11 @@ import { handleFunctionDeclaration } from './function-declaration';
 import { handleVariableDeclaration } from './variable-declaration';
 import { handleBlockStatement } from './block-statement';
 import { handleIfStatement } from './if-statement';
+import { handleImportDeclaration } from './import-declaration';
 import { handleExpressionStatement } from './expression-statement';
 import { handleReturnStatement } from './return-statement';
 
-export const handleStatement: StatementHandler = (node, scopeManager, fileName) => {
+export const handleStatement: StatementHandler = (node, scopeManager, fileName, services) => {
   console.info('handleStatement', node.type);
 
   let statementHandler: StatementHandler<any>;
@@ -29,6 +30,10 @@ export const handleStatement: StatementHandler = (node, scopeManager, fileName) 
       statementHandler = handleIfStatement;
       break;
     }
+    case AST_NODE_TYPES.ImportDeclaration: {
+      statementHandler = handleImportDeclaration;
+      break;
+    }
     case AST_NODE_TYPES.VariableDeclaration: {
       statementHandler = handleVariableDeclaration;
       break;
@@ -44,5 +49,5 @@ export const handleStatement: StatementHandler = (node, scopeManager, fileName) 
     }
   }
 
-  return statementHandler(node, scopeManager, fileName);
+  return statementHandler(node, scopeManager, fileName, services);
 };

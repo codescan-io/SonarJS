@@ -183,6 +183,8 @@ export const handleExpression: ExpressionHandler = (node, context, scope) => {
       expressionHandler = handleBinaryExpression;
       break;
     }
+    // TODO
+    //case AST_NODE_TYPES.ImportExpression: {break;}
     case AST_NODE_TYPES.Identifier: {
       expressionHandler = handleIdentifier;
       break;

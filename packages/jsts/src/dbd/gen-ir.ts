@@ -19,10 +19,17 @@ Promise.resolve()
       for await (const dirPath of options.file) {
         const stats = await fs.stat(dirPath);
         if (stats.isDirectory()) {
-          await generateDirIR(dirPath, options.output, options.print, options.root);
+          await generateDirIR(dirPath, undefined, options.output, options.print, options.root);
         }
         if (stats.isFile()) {
-          await generateIR(dirPath, options.output, undefined, options.print, options.root);
+          await generateIR(
+            dirPath,
+            undefined,
+            options.output,
+            undefined,
+            options.print,
+            options.root,
+          );
         }
       }
     }
@@ -31,6 +38,7 @@ Promise.resolve()
       for (const contents of options.string) {
         await generateIR(
           path.join(process.cwd(), `cli-snippet-${i++}.js`),
+          undefined,
           options.output || process.cwd(),
           contents,
           options.print,
