@@ -63,5 +63,10 @@ function handleValueDeclaration(value: Declaration) {
     case SyntaxKind.MethodDeclaration: {
       break;
     }
+    case SyntaxKind.ObjectLiteralExpression:
+      break;
+    case SyntaxKind.SourceFile:
+    //look into symbol->exports
+    case SyntaxKind.FunctionDeclaration:
   }
 }
