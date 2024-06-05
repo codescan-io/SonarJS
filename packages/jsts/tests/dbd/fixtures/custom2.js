@@ -7,12 +7,13 @@ class name {
 function foo() {
   return;
 }
-
-export default {
+const bla = {
   dirname(path) {
     return path.toLowerCase();
   }
 }
+
+export default bla;
 
 export {foo, foo as bar};
 
