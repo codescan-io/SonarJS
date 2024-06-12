@@ -45,12 +45,19 @@ export function buildSourceCode(input: JsTsAnalysisInput, language: JsTsLanguage
     };
     const parser = vueFile ? parsers.vuejs : parsers.typescript;
     if (!vueFile) {
-      options.programs = input.programId && [getProgramById(input.programId)];
+      options.programs = (input.programId && [getProgramById(input.programId)]) || [
+        input.project?.getProgram().compilerObject,
+      ];
       options.project = input.tsConfigs;
     }
     try {
       debug(`Parsing ${input.filePath} with ${parser.parser}`);
-      return parseForESLint(input.fileContent, parser.parse, buildParserOptions(options, false));
+      return parseForESLint(
+        input.fileContent,
+        parser.parse,
+        buildParserOptions(options, false),
+        input.project,
+      );
     } catch (error) {
       debug(`Failed to parse ${input.filePath} with TypeScript parser: ${error.message}`);
       if (language === 'ts') {

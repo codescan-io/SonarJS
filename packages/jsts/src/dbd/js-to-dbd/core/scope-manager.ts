@@ -42,34 +42,35 @@ function getDefinitionFromIdentifier(sourceCode: SourceCode, node: TSESTree.Iden
 }
 
 function getFunctionDefinition(sourceCode: SourceCode, node: TSESTree.Node) {
-  if (node.type === AST_NODE_TYPES.FunctionDeclaration && node.id) {
-    node = node.id;
-  } else if (node.parent && node.parent.type === AST_NODE_TYPES.Property) {
-    node = node.parent.key;
+  let symbolNode = node;
+  if (symbolNode.type === AST_NODE_TYPES.FunctionDeclaration && symbolNode.id) {
+    symbolNode = symbolNode.id;
+  } else if (symbolNode.parent && symbolNode.parent.type === AST_NODE_TYPES.Property) {
+    symbolNode = symbolNode.parent.key;
   }
   const services: ParserServicesWithTypeInformation =
     sourceCode.parserServices as unknown as ParserServicesWithTypeInformation;
   let filename = 'unknown';
-  let name = node.type === AST_NODE_TYPES.Identifier ? node.name : 'unknown';
+  let name = symbolNode.type === AST_NODE_TYPES.Identifier ? symbolNode.name : 'unknown';
 
   if (!services) {
     return createFunctionDefinitionFromName(name, filename);
   }
-  const tsNode = services.esTreeNodeToTSNodeMap?.get(node);
+  const tsNode = services.esTreeNodeToTSNodeMap?.get(symbolNode);
   const program = services.program;
 
   if (!program || !tsNode) {
     return createFunctionDefinitionFromName(name, filename);
   }
-  let symbol = services.getSymbolAtLocation(node);
+  let symbol = services.getSymbolAtLocation(symbolNode);
 
   if (symbol) {
-    while (!symbolIsFunction(symbol) && getLinkedSymbol(symbol)) {
-      symbol = getLinkedSymbol(symbol);
-      if (symbol) {
-        symbol = getLinkedSymbol(symbol);
-      }
+    const linkedSymbol = getLinkedSymbol(symbol);
+    while (!symbolIsFunction(symbol) && linkedSymbol) {
+      symbol = linkedSymbol;
     }
+    // @ts-ignore
+    const _valueDeclarationSymbol = getValueDeclarationSymbol(symbol);
     filename = symbol.declarations?.[0]?.getSourceFile()?.fileName ?? filename;
     const symbolId = getSymbolId(symbol);
     if (symbolId) {
@@ -182,10 +183,18 @@ function getLinkedSymbol(symbol: ts.Symbol) {
   return ((symbol as any).links?.type as ts.Type)?.symbol;
 }
 
+function getValueDeclarationSymbol(symbol: ts.Symbol) {
+  const valueDeclaration = symbol.valueDeclaration;
+  if (!valueDeclaration) return null;
+  if (ts.isPropertyAssignment(valueDeclaration)) {
+    return valueDeclaration.initializer;
+  }
+}
+
 function getSymbolId(symbol: ts.Symbol) {
   return (symbol as any).id;
 }
 
 function symbolIsFunction(symbol: ts.Symbol) {
-  return !(symbol.flags & ts.SymbolFlags.Function);
+  return symbol.flags & ts.SymbolFlags.Function;
 }

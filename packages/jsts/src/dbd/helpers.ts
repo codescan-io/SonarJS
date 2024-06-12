@@ -5,13 +5,14 @@ import { buildSourceCode } from '@sonar/jsts';
 import { FunctionId, FunctionInfo } from './ir-gen/ir_pb';
 import { Linter } from 'eslint';
 import { rule } from '../rules/S999999';
+import { Project } from 'ts-morph';
 
 const linter = new Linter();
 linter.defineRule('dbd-rule', rule);
 
 export async function generateDirIR(
   dirPath: string,
-  programId?: string,
+  project?: Project,
   outDir?: string,
   print = false,
   root?: string,
@@ -20,16 +21,16 @@ export async function generateDirIR(
     const filePath = path.join(dirPath, file.name);
 
     if (file.isDirectory()) {
-      await generateDirIR(filePath, programId, outDir, print, root);
+      await generateDirIR(filePath, project, outDir, print, root);
     } else {
-      await generateIR(filePath, programId, outDir, undefined, print, root);
+      await generateIR(filePath, project, outDir, undefined, print, root);
     }
   }
 }
 
 export async function generateIR(
   filePath: string,
-  programId?: string,
+  project?: Project,
   outDir?: string,
   fileContent?: string,
   print = false,
@@ -41,7 +42,7 @@ export async function generateIR(
   if (!fileContent) {
     fileContent = await readFile(filePath);
   }
-  const sourceCode = buildSourceCode({ fileContent, filePath, programId, fileType: 'MAIN' }, 'js');
+  const sourceCode = buildSourceCode({ fileContent, filePath, project, fileType: 'MAIN' }, 'js');
   linter.verify(
     sourceCode,
     { rules: { 'dbd-rule': 'error' }, settings: { dbd: { outDir, print, root } } },

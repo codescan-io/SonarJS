@@ -20,6 +20,7 @@
 import { APIError } from '@sonar/shared';
 import { SourceCode } from 'eslint';
 import { ParseFunction } from './eslint';
+import { Project } from 'ts-morph';
 
 /**
  * Parses a JavaScript / TypeScript analysis input with an ESLint-based parser
@@ -28,10 +29,16 @@ import { ParseFunction } from './eslint';
  * @param options the ESLint parser options
  * @returns the parsed source code
  */
-export function parseForESLint(code: string, parse: ParseFunction, options: {}): SourceCode {
+export function parseForESLint(
+  code: string,
+  parse: ParseFunction,
+  options: {},
+  project?: Project,
+): SourceCode {
   try {
     const result = parse(code, options);
     const parserServices = result.services || {};
+    parserServices.project = project;
     return new SourceCode({
       ...result,
       text: code,

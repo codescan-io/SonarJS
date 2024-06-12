@@ -19,6 +19,7 @@
  */
 import { FileType, JsTsLanguage, AnalysisInput, AnalysisOutput, ErrorCode } from '@sonar/shared';
 import { CpdToken, Issue, Metrics, SymbolHighlight, SyntaxHighlight } from '../linter';
+import { Project } from 'ts-morph';
 
 /**
  *
@@ -44,6 +45,7 @@ export interface JsTsAnalysisInput extends AnalysisInput {
   ignoreHeaderComments?: boolean;
   tsConfigs?: string[];
   programId?: string;
+  project?: Project;
 }
 
 export interface ParsingError {
