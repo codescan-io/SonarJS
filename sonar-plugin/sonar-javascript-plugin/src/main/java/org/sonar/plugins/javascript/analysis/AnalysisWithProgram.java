@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.plugins.javascript.JavaScriptPlugin;
+import org.sonar.plugins.javascript.api.cache.CacheStrategiesIface;
 import org.sonar.plugins.javascript.bridge.AnalysisWarningsWrapper;
 import org.sonar.plugins.javascript.bridge.BridgeServer;
 import org.sonar.plugins.javascript.bridge.BridgeServer.TsProgram;
@@ -43,12 +44,22 @@ import org.sonarsource.api.sonarlint.SonarLintSide;
 public class AnalysisWithProgram extends AbstractAnalysis {
 
   private static final Logger LOG = LoggerFactory.getLogger(AnalysisWithProgram.class);
+
   public AnalysisWithProgram(
     BridgeServer bridgeServer,
     AnalysisProcessor analysisProcessor,
     AnalysisWarningsWrapper analysisWarnings
   ) {
-    super(bridgeServer, analysisProcessor, analysisWarnings);
+    this(bridgeServer, analysisProcessor, analysisWarnings, CacheStrategiesIface.Noop.Instance);
+  }
+
+  public AnalysisWithProgram(
+    BridgeServer bridgeServer,
+    AnalysisProcessor analysisProcessor,
+    AnalysisWarningsWrapper analysisWarnings,
+    CacheStrategiesIface cacheStrategies
+  ) {
+    super(bridgeServer, analysisProcessor, analysisWarnings, cacheStrategies);
   }
 
   @Override

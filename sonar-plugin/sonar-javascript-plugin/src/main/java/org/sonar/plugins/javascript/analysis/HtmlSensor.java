@@ -31,9 +31,9 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.plugins.javascript.CancellationException;
 import org.sonar.plugins.javascript.JavaScriptLanguage;
-import org.sonar.plugins.javascript.analysis.cache.CacheAnalysis;
-import org.sonar.plugins.javascript.analysis.cache.CacheStrategies;
-import org.sonar.plugins.javascript.analysis.cache.CacheStrategy;
+import org.sonar.plugins.javascript.api.cache.CacheAnalysis;
+import org.sonar.plugins.javascript.api.cache.CacheStrategiesIface;
+import org.sonar.plugins.javascript.api.cache.CacheStrategy;
 import org.sonar.plugins.javascript.bridge.AnalysisMode;
 import org.sonar.plugins.javascript.bridge.BridgeServer;
 import org.sonar.plugins.javascript.bridge.BridgeServer.JsAnalysisRequest;
@@ -46,18 +46,21 @@ public class HtmlSensor extends AbstractBridgeSensor {
   private static final Logger LOG = LoggerFactory.getLogger(HtmlSensor.class);
   private final JsTsChecks checks;
   private final AnalysisProcessor analysisProcessor;
+  private final CacheStrategiesIface cacheStrategies;
   private AnalysisMode analysisMode;
 
   public HtmlSensor(
     JsTsChecks checks,
     BridgeServer bridgeServer,
-    AnalysisProcessor processAnalysis
+    AnalysisProcessor processAnalysis,
+    CacheStrategiesIface cacheStrategies
   ) {
     // The monitoring sensor remains inactive during HTML files analysis, as the
     // bridge doesn't provide nor compute metrics for such files.
     super(bridgeServer, "JS in HTML");
     this.analysisProcessor = processAnalysis;
     this.checks = checks;
+    this.cacheStrategies = cacheStrategies;
   }
 
   @Override
@@ -87,7 +90,7 @@ public class HtmlSensor extends AbstractBridgeSensor {
           );
         }
         progressReport.nextFile(inputFile.toString());
-        var cacheStrategy = CacheStrategies.getStrategyFor(context, inputFile);
+        var cacheStrategy = cacheStrategies.getStrategyFor(context, inputFile);
         if (cacheStrategy.isAnalysisRequired()) {
           analyze(inputFile, cacheStrategy);
         }

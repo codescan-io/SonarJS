@@ -35,8 +35,8 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.plugins.javascript.CancellationException;
 import org.sonar.plugins.javascript.JavaScriptLanguage;
-import org.sonar.plugins.javascript.analysis.cache.CacheAnalysis;
-import org.sonar.plugins.javascript.analysis.cache.CacheStrategies;
+import org.sonar.plugins.javascript.api.cache.CacheAnalysis;
+import org.sonar.plugins.javascript.api.cache.CacheStrategiesIface;
 import org.sonar.plugins.javascript.bridge.AnalysisMode;
 import org.sonar.plugins.javascript.bridge.AnalysisWarningsWrapper;
 import org.sonar.plugins.javascript.bridge.BridgeServer;
@@ -52,19 +52,22 @@ public class YamlSensor extends AbstractBridgeSensor {
   private static final Logger LOG = LoggerFactory.getLogger(YamlSensor.class);
   private final JsTsChecks checks;
   private final AnalysisProcessor analysisProcessor;
+  private final CacheStrategiesIface cacheStrategies;
   private AnalysisMode analysisMode;
 
   public YamlSensor(
     JsTsChecks checks,
     BridgeServer bridgeServer,
     AnalysisWarningsWrapper analysisWarnings,
-    AnalysisProcessor processAnalysis
+    AnalysisProcessor processAnalysis,
+    CacheStrategiesIface cacheStrategies
   ) {
     // The monitoring sensor remains inactive during YAML files analysis, as the
     // bridge doesn't provide nor compute metrics for such files.
     super(bridgeServer, "JS in YAML");
     this.checks = checks;
     this.analysisProcessor = processAnalysis;
+    this.cacheStrategies = cacheStrategies;
   }
 
   @Override
@@ -149,7 +152,7 @@ public class YamlSensor extends AbstractBridgeSensor {
   }
 
   private void analyze(InputFile file) throws IOException {
-    var cacheStrategy = CacheStrategies.getStrategyFor(context, file);
+    var cacheStrategy = cacheStrategies.getStrategyFor(context, file);
     // When there is no analysis required, the sensor doesn't need to do anything as the CPD tokens are handled by the sonar-iac plugin.
     // See AnalysisProcessor for more details.
     if (cacheStrategy.isAnalysisRequired()) {

@@ -50,12 +50,12 @@ import org.sonar.api.measures.Metric;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.Version;
-import org.sonar.plugins.javascript.analysis.cache.CacheAnalysis;
+import org.sonar.plugins.javascript.api.cache.CacheAnalysis;
 import org.sonar.plugins.javascript.bridge.BridgeServer.AnalysisResponse;
-import org.sonar.plugins.javascript.bridge.BridgeServer.CpdToken;
+import org.sonar.plugins.javascript.api.CpdToken;
 import org.sonar.plugins.javascript.bridge.BridgeServer.Highlight;
 import org.sonar.plugins.javascript.bridge.BridgeServer.HighlightedSymbol;
-import org.sonar.plugins.javascript.bridge.BridgeServer.Location;
+import org.sonar.plugins.javascript.api.Location;
 import org.sonar.plugins.javascript.bridge.BridgeServer.Metrics;
 import org.sonar.plugins.javascript.bridge.BridgeServer.ParsingError;
 import org.sonar.plugins.javascript.bridge.BridgeServer.ParsingErrorCode;
@@ -140,7 +140,9 @@ public class AnalysisProcessor {
         "Skipping processing of the analysis extracted from cache because the javascript plugin doesn't save analysis data of YAML files"
       );
     } else {
-      saveCpd(cacheAnalysis.getCpdTokens());
+      if (cacheAnalysis != null) {
+        saveCpd(cacheAnalysis.getCpdTokens());
+      }
     }
   }
 

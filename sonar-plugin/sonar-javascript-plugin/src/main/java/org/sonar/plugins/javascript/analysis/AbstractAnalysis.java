@@ -31,9 +31,9 @@ import org.sonar.plugins.javascript.CancellationException;
 import org.sonar.plugins.javascript.JavaScriptFilePredicate;
 import org.sonar.plugins.javascript.JavaScriptLanguage;
 import org.sonar.plugins.javascript.TypeScriptLanguage;
-import org.sonar.plugins.javascript.analysis.cache.CacheAnalysis;
-import org.sonar.plugins.javascript.analysis.cache.CacheStrategies;
+import org.sonar.plugins.javascript.api.cache.CacheAnalysis;
 import org.sonar.plugins.javascript.api.JsFile;
+import org.sonar.plugins.javascript.api.cache.CacheStrategiesIface;
 import org.sonar.plugins.javascript.api.estree.ESTree;
 import org.sonar.plugins.javascript.bridge.AnalysisMode;
 import org.sonar.plugins.javascript.bridge.AnalysisWarningsWrapper;
@@ -51,6 +51,7 @@ abstract class AbstractAnalysis {
 
   final BridgeServer bridgeServer;
   final AnalysisProcessor analysisProcessor;
+  private final CacheStrategiesIface cacheStrategies;
   SensorContext context;
   ContextUtils contextUtils;
   JsTsChecks checks;
@@ -62,11 +63,14 @@ abstract class AbstractAnalysis {
   AbstractAnalysis(
     BridgeServer bridgeServer,
     AnalysisProcessor analysisProcessor,
-    AnalysisWarningsWrapper analysisWarnings
+    AnalysisWarningsWrapper analysisWarnings,
+    CacheStrategiesIface cacheStrategies
   ) {
     this.bridgeServer = bridgeServer;
     this.analysisProcessor = analysisProcessor;
     this.analysisWarnings = analysisWarnings;
+    this.cacheStrategies = cacheStrategies;
+    LOG.info("Using cache strategy: {}", cacheStrategies.getClass().getName());
   }
 
   protected static String inputFileLanguage(InputFile file) {
@@ -96,7 +100,7 @@ abstract class AbstractAnalysis {
         "Analysis interrupted because the SensorContext is in cancelled state"
       );
     }
-    var cacheStrategy = CacheStrategies.getStrategyFor(context, file);
+    var cacheStrategy = cacheStrategies.getStrategyFor(context, file);
     if (cacheStrategy.isAnalysisRequired()) {
       try {
         LOG.debug("Analyzing file: {}", file.uri());

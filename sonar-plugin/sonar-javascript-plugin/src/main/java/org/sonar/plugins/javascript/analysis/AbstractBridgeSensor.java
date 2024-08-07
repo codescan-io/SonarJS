@@ -29,7 +29,6 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.plugins.javascript.CancellationException;
 import org.sonar.plugins.javascript.JavaScriptPlugin;
-import org.sonar.plugins.javascript.analysis.cache.CacheStrategies;
 import org.sonar.plugins.javascript.bridge.BridgeServer;
 import org.sonar.plugins.javascript.bridge.BridgeServerConfig;
 import org.sonar.plugins.javascript.bridge.ServerAlreadyFailedException;
@@ -61,7 +60,6 @@ public abstract class AbstractBridgeSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    CacheStrategies.reset();
     this.context = context;
     this.exclusions = Arrays.asList(Exclusions.getExcludedPaths(context.config()));
     this.contextUtils = new ContextUtils(context);
@@ -101,7 +99,7 @@ public abstract class AbstractBridgeSensor implements Sensor {
       LOG.error("Failure during analysis", e);
       throw new IllegalStateException("Analysis of " + this.lang + " files failed", e);
     } finally {
-      CacheStrategies.logReport();
+//      CacheStrategies.logReport();
     }
   }
 

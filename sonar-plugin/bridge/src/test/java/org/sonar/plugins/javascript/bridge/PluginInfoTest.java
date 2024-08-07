@@ -22,6 +22,7 @@ package org.sonar.plugins.javascript.bridge;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.javascript.api.PluginInfo;
 
 class PluginInfoTest {
 

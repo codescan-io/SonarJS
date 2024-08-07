@@ -16,10 +16,10 @@ import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.javascript.bridge.BridgeServer.AnalysisResponse;
-import org.sonar.plugins.javascript.bridge.BridgeServer.CpdToken;
+import org.sonar.plugins.javascript.api.CpdToken;
 import org.sonar.plugins.javascript.bridge.BridgeServer.Highlight;
 import org.sonar.plugins.javascript.bridge.BridgeServer.HighlightedSymbol;
-import org.sonar.plugins.javascript.bridge.BridgeServer.Location;
+import org.sonar.plugins.javascript.api.Location;
 import org.sonar.plugins.javascript.bridge.BridgeServer.Metrics;
 
 class AnalysisProcessorTest {

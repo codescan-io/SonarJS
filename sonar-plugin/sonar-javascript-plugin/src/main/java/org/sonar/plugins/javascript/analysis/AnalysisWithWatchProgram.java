@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.scanner.ScannerSide;
+import org.sonar.plugins.javascript.api.cache.CacheStrategiesIface;
 import org.sonar.plugins.javascript.bridge.AnalysisWarningsWrapper;
 import org.sonar.plugins.javascript.bridge.BridgeServer;
 import org.sonar.plugins.javascript.bridge.TsConfigFile;
@@ -49,7 +50,16 @@ public class AnalysisWithWatchProgram extends AbstractAnalysis {
     AnalysisProcessor analysisProcessor,
     AnalysisWarningsWrapper analysisWarnings
   ) {
-    super(bridgeServer, analysisProcessor, analysisWarnings);
+    super(bridgeServer, analysisProcessor, analysisWarnings, CacheStrategiesIface.Noop.Instance);
+  }
+
+  public AnalysisWithWatchProgram(
+    BridgeServer bridgeServer,
+    AnalysisProcessor analysisProcessor,
+    AnalysisWarningsWrapper analysisWarnings,
+    CacheStrategiesIface cacheStrategies
+  ) {
+    super(bridgeServer, analysisProcessor, analysisWarnings, cacheStrategies);
   }
 
   @Override

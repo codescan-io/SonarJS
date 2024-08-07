@@ -1,6 +1,6 @@
 /*
  * SonarQube JavaScript Plugin
- * Copyright (C) 2012-2024 SonarSource SA
+ * Copyright (C) 2011-2024 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -17,21 +17,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.samples.javascript;
+package com.sonar.javascript.enterprise;
 
-import com.sonar.javascript.enterprise.CacheStrategies;
-import org.sonar.api.Plugin;
+import java.util.Enumeration;
+import java.util.Iterator;
 
-public class EslintCustomRulesPlugin implements Plugin {
+@SuppressWarnings("java:S1150")
+class IteratorEnumeration<T> implements Enumeration<T> {
+
+  private final Iterator<T> iterator;
+
+  IteratorEnumeration(Iterator<T> iterator) {
+    this.iterator = iterator;
+  }
 
   @Override
-  public void define(Context context) {
-    context.addExtensions(
-      EslintRulesBundle.class,
-      CustomRulesDefinition.class,
-      RuleRepository.class,
-      TsRepository.class,
-      CacheStrategies.class
-    );
+  public boolean hasMoreElements() {
+    return iterator.hasNext();
+  }
+
+  @Override
+  public T nextElement() {
+    return iterator.next();
   }
 }

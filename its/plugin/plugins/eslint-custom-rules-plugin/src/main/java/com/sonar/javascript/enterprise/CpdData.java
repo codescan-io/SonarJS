@@ -1,6 +1,6 @@
 /*
  * SonarQube JavaScript Plugin
- * Copyright (C) 2012-2024 SonarSource SA
+ * Copyright (C) 2011-2024 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -17,21 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.samples.javascript;
+package com.sonar.javascript.enterprise;
 
-import com.sonar.javascript.enterprise.CacheStrategies;
-import org.sonar.api.Plugin;
+import java.util.List;
+import org.sonar.plugins.javascript.api.CpdToken;
 
-public class EslintCustomRulesPlugin implements Plugin {
+class CpdData {
 
-  @Override
-  public void define(Context context) {
-    context.addExtensions(
-      EslintRulesBundle.class,
-      CustomRulesDefinition.class,
-      RuleRepository.class,
-      TsRepository.class,
-      CacheStrategies.class
-    );
+  private final List<CpdToken> cpdTokens;
+
+  CpdData(List<CpdToken> cpdTokens) {
+    this.cpdTokens = List.copyOf(cpdTokens);
+  }
+
+  List<CpdToken> getCpdTokens() {
+    return cpdTokens;
   }
 }

@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.sonar.api.Startable;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.scanner.ScannerSide;
+import org.sonar.plugins.javascript.api.CpdToken;
+import org.sonar.plugins.javascript.api.Location;
 import org.sonar.plugins.javascript.bridge.protobuf.Node;
 import org.sonarsource.api.sonarlint.SonarLintSide;
 
@@ -136,20 +136,6 @@ public interface BridgeServer extends Startable {
     Location declaration, List<Location> references) {
   }
 
-  record Location(
-
-    int startLine, int startCol, int endLine, int endCol) {
-
-    public TextRange toTextRange(InputFile inputFile) {
-      return inputFile.newRange(this.startLine, this.startCol, this.endLine, this.endCol);
-    }
-
-    @Override
-    public String toString() {
-      return String.format("%d:%d-%d:%d", startLine, startCol, endLine, endCol);
-    }
-  }
-
   record Metrics(
 
     List<Integer> ncloc, List<Integer> commentLines, List<Integer> nosonarLines, List<Integer> executableLines, int functions,
@@ -157,11 +143,6 @@ public interface BridgeServer extends Startable {
     public Metrics() {
       this(List.of(), List.of(), List.of(), List.of(), 0, 0, 0, 0, 0);
     }
-  }
-
-  record CpdToken(
-
-    Location location, String image) {
   }
 
   class TsConfigResponse {

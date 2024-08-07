@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.SonarProduct;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.utils.TempFolder;
+import org.sonar.plugins.javascript.api.PluginInfo;
 import org.sonar.plugins.javascript.nodejs.NodeCommand;
 import org.sonar.plugins.javascript.nodejs.NodeCommandBuilder;
 import org.sonar.plugins.javascript.nodejs.NodeCommandException;
