@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.javascript.analysis;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -163,7 +164,7 @@ public class JsTsChecks {
           .map(check ->
             new EslintRule(
               check.eslintKey(),
-              check.configurations(),
+              Collections.emptyMap(),
               check.targets(),
               e.getKey().language
             )

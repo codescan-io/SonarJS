@@ -20,6 +20,7 @@
 package org.sonar.plugins.javascript.bridge;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import org.sonar.api.batch.fs.InputFile;
@@ -30,18 +31,18 @@ public class EslintRule {
 
   final String key;
   final List<String> fileTypeTarget;
-  final List<Object> configurations;
+  final Map<String, String> params;
   final String language;
 
   public EslintRule(
     String key,
-    List<Object> configurations,
+    Map<String, String> params,
     List<InputFile.Type> fileTypeTarget,
     String language
   ) {
     this.key = key;
     this.fileTypeTarget = fileTypeTarget.stream().map(InputFile.Type::name).toList();
-    this.configurations = configurations;
+    this.params = params;
     // unfortunately we can't check this using types, so it's enforced at runtime
     if (!"js".equals(language) && !"ts".equals(language)) {
       throw new IllegalArgumentException("Invalid language " + language);
@@ -58,8 +59,8 @@ public class EslintRule {
     return key;
   }
 
-  public List<Object> getConfigurations() {
-    return configurations;
+  public Map<String, String> getParams() {
+    return params;
   }
 
   static EslintRule findFirstRuleWithKey(List<EslintRule> rules, String eslintKey) {

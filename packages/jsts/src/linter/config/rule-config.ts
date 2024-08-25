@@ -20,6 +20,7 @@
 import { Rule } from 'eslint';
 import { FileType, getContext, JsTsLanguage } from '@sonar/shared';
 import { hasSonarContextOption, hasSonarRuntimeOption, SONAR_RUNTIME } from '../parameters';
+import { ruleDefaults } from './default-configs';
 
 /**
  * An input rule configuration for linting
@@ -55,7 +56,8 @@ export interface RuleConfig {
  * @returns the extended rule configuration
  */
 export function extendRuleConfig(ruleModule: Rule.RuleModule | undefined, inputRule: RuleConfig) {
-  const options = [...inputRule.configurations];
+  const defaultOptions = ruleDefaults[inputRule.key] ?? [];
+  const options = inputRule.configurations ? [...inputRule.configurations] : [...defaultOptions];
   if (hasSonarRuntimeOption(ruleModule, inputRule.key)) {
     options.push(SONAR_RUNTIME);
   }

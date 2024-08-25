@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
@@ -58,6 +59,7 @@ import org.sonar.plugins.javascript.nodejs.ProcessWrapper;
 import org.sonar.plugins.javascript.nodejs.ProcessWrapperImpl;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -198,7 +200,7 @@ class BridgeServerImplTest {
     List<EslintRule> rules = Collections.singletonList(
       new EslintRule(
         "key",
-        singletonList("config"),
+        Map.of("config", "value"),
         Collections.singletonList(InputFile.Type.MAIN),
         "js"
       )
@@ -601,7 +603,7 @@ class BridgeServerImplTest {
   void test_rule_tostring() {
     EslintRule rule = new EslintRule(
       "key",
-      emptyList(),
+      emptyMap(),
       Collections.singletonList(InputFile.Type.MAIN),
       "js"
     );

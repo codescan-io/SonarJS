@@ -21,6 +21,7 @@ package org.sonar.plugins.javascript.analysis;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
@@ -29,12 +30,14 @@ import org.sonar.api.batch.DependedUpon;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.plugins.javascript.JavaScriptFilePredicate;
 import org.sonar.plugins.javascript.JavaScriptLanguage;
 import org.sonar.plugins.javascript.TypeScriptLanguage;
 import org.sonar.plugins.javascript.bridge.AnalysisMode;
 import org.sonar.plugins.javascript.bridge.BridgeServer;
+import org.sonar.plugins.javascript.bridge.EslintRule;
 import org.sonar.plugins.javascript.sonarlint.SonarLintTypeCheckingChecker;
 
 @DependedUpon("js-analysis")
@@ -101,7 +104,7 @@ public class JsTsSensor extends AbstractBridgeSensor {
   protected void analyzeFiles(List<InputFile> inputFiles) throws IOException {
     var analysisMode = AnalysisMode.getMode(context);
     bridgeServer.initLinter(
-      checks.eslintRules(),
+      ruleConfigs(context.activeRules()),
       environments,
       globals,
       analysisMode,
@@ -127,6 +130,13 @@ public class JsTsSensor extends AbstractBridgeSensor {
     analysis.initialize(context, checks, analysisMode, consumers);
     analysis.analyzeFiles(inputFiles, tsConfigs);
     consumers.doneAnalysis();
+  }
+
+  private List<EslintRule> ruleConfigs(ActiveRules activeRules) {
+    return Stream.of(JavaScriptLanguage.KEY, TypeScriptLanguage.KEY)
+      .flatMap(language -> activeRules.findByLanguage(language).stream())
+      .map(rule -> new EslintRule(rule.ruleKey().rule(), rule.params(), List.of(InputFile.Type.MAIN), rule.language()))
+      .toList();
   }
 
   private String createTsConfigFile(String content) throws IOException {

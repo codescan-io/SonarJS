@@ -20,6 +20,7 @@
 package org.sonar.plugins.javascript.bridge;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.function.Function.identity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -133,7 +134,7 @@ class AnalysisModeTest {
   private static List<EslintRule> rules(String... keys) {
     return Arrays
       .stream(keys)
-      .map(key -> new EslintRule(key, emptyList(), emptyList(), "js"))
+      .map(key -> new EslintRule(key, emptyMap(), emptyList(), "js"))
       .toList();
   }
 
