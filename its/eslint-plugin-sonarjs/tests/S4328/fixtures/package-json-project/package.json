@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "dependency": "latest",
+    "@namespaced/dependency": "latest",
+    "@types/typed-dependency": "latest"
+  },
+  "devDependencies": {
+    "devDependency": "latest"
+  },
+  "peerDependencies": {
+    "peerDependency": "latest"
+  },
+  "optionalDependencies": {
+    "optionalDependency": "latest"
+  },
+  "_moduleAliases": {
+    "moduleAlias": "./module1"
+  },
+  "workspaces": [
+    "project1",
+    "project2"
+  ]
+}

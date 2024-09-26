@@ -10,6 +10,8 @@ packages/ruling/tests/actual
 
 its/sources
 
+its/eslint-plugin-sonarjs/tests
+
 its/plugin/projects
 its/plugin/tests/target
 
