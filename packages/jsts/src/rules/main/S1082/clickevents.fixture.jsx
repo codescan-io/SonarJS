@@ -4,5 +4,4 @@
 <button onClick={() => {}} />;
 <div onClick={() => {}} aria-hidden="true" />;
 
-<div onClick={() => {}} />;  // Noncompliant
-
+<div onClick={() => {}} />; // Noncompliant

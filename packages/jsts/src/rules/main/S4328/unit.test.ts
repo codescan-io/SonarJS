@@ -18,7 +18,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import { RuleTester } from 'eslint';
-import { rule } from './';
+import { S4328 } from './';
 import path from 'path';
 
 const fixtures = path.join(__dirname, 'fixtures');
@@ -34,7 +34,7 @@ const ruleTester = new RuleTester({
   parserOptions: { ecmaVersion: 2018, sourceType: 'module' },
 });
 
-ruleTester.run('Dependencies should be explicit', rule, {
+ruleTester.run('Dependencies should be explicit', S4328, {
   valid: [
     {
       code: `import * as fs from "fs";`,
@@ -195,7 +195,7 @@ const ruleTesterNestedPackage = new RuleTester({
 
 const filenameNestedPackage = path.join(fixtures, 'nested-package-json-project/dir/file.js');
 
-ruleTesterNestedPackage.run('all levels of package.json should be considered', rule, {
+ruleTesterNestedPackage.run('all levels of package.json should be considered', S4328, {
   valid: [
     {
       code: `
@@ -231,7 +231,7 @@ const ruleTesterForPathMappings = new RuleTester({
 
 const filenameForFileWithPathMappings = path.join(fixtures, 'ts-project-with-path-aliases/file.ts');
 
-ruleTesterForPathMappings.run('Path aliases should be exempt', rule, {
+ruleTesterForPathMappings.run('Path aliases should be exempt', S4328, {
   valid: [
     {
       code: `
@@ -282,7 +282,7 @@ const ruleTesterForBaseUrl = new RuleTester({
 
 const filenameForBaseUrl = path.join(fixtures, 'ts-project-with-base-url/nested/file.ts');
 
-ruleTesterForBaseUrl.run('Imports based on baseUrl should be accepted', rule, {
+ruleTesterForBaseUrl.run('Imports based on baseUrl should be accepted', S4328, {
   valid: [
     {
       code: `

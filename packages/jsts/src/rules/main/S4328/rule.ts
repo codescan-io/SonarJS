@@ -32,9 +32,13 @@ const messages = {
   removeOrAddDependency: 'Either remove this import or add it as a dependency.',
 };
 
-export const rule: Rule.RuleModule = {
+export const S4328: Rule.RuleModule = {
   meta: generateMeta(meta as Rule.RuleMetaData, { messages, schema }),
   create(context: Rule.RuleContext) {
+    // @ts-ignore
+    // todo: I put this deliberately to demonstrate that the ESLint9 test successfully detects the problem
+    context.getSource();
+
     // we need to find all the npm manifests from the directory of the analyzed file to the context working directory
     const dependencies = getDependencies(context.filename, context.cwd);
 

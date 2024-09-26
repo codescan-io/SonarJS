@@ -17,23 +17,4 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
-import { getProp, getLiteralPropValue } from 'jsx-ast-utils';
-import getElementType from 'eslint-plugin-jsx-a11y/lib/util/getElementType';
-import { TSESTree } from '@typescript-eslint/utils';
-import { Rule } from 'eslint';
-
-export function isPresentationTable(context: Rule.RuleContext, node: TSESTree.JSXOpeningElement) {
-  const DISALLOWED_VALUES = ['presentation', 'none'];
-  const type = getElementType(context)(node);
-  if (type.toLowerCase() !== 'table') {
-    return false;
-  }
-  const role = getProp(node.attributes, 'role');
-  if (!role) {
-    return false;
-  }
-  const roleValue = String(getLiteralPropValue(role));
-
-  return DISALLOWED_VALUES.includes(roleValue?.toLowerCase());
-}
+export { S4328 } from './rule';
