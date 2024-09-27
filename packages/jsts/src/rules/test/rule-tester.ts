@@ -3,11 +3,12 @@ import { ESLint as ESLint8, Linter as Linter8, Rule as Rule8 } from 'eslint8';
 import * as Parser7 from '@typescript-eslint/parser7';
 import * as Parser8 from '@typescript-eslint/parser8';
 import assert from 'node:assert';
-import { it } from 'node:test';
+import { describe, it } from 'node:test';
 
 interface TestCase {
   code: string;
   filename: string;
+  name?: string;
   options: Array<Record<string, unknown>>;
 }
 
@@ -29,7 +30,7 @@ export class RuleTester {
   ) {}
 
   run(name: string, rule: Rule8.RuleModule, testCases: TestCases) {
-    it(name, () => {
+    describe(name, () => {
       const linter8 = new Linter8();
 
       linter8.defineRule('test/candidate', rule);
@@ -75,42 +76,54 @@ export class RuleTester {
         );
       };
 
-      for (const testCase of testCases.valid) {
-        const linter8Messages = getLinter8Messages(testCase);
-        const linter9Messages = getLinter9Messages(testCase);
+      const getTestCaseName = (testCase: TestCase): string => {
+        return testCase.name ?? testCase.code.split('\n')[0];
+      };
 
-        assert.equal(linter8Messages.length, 0);
-        assert.equal(linter9Messages.length, 0);
+      for (const testCase of testCases.valid) {
+        const name = getTestCaseName(testCase);
+
+        it(name, () => {
+          const linter8Messages = getLinter8Messages(testCase);
+          const linter9Messages = getLinter9Messages(testCase);
+
+          assert.equal(linter8Messages.length, 0);
+          assert.equal(linter9Messages.length, 0);
+        });
       }
 
       for (const testCase of testCases.invalid) {
-        const linter8Messages = getLinter8Messages(testCase);
-        const linter9Messages = getLinter9Messages(testCase);
+        const name = getTestCaseName(testCase);
 
-        if (typeof testCase.errors === 'number') {
-          assert.equal(linter8Messages.length, testCase.errors);
-          assert.equal(linter9Messages.length, testCase.errors);
-        } else {
-          assert.equal(linter9Messages.length, linter8Messages.length);
+        it(name, () => {
+          const linter8Messages = getLinter8Messages(testCase);
+          const linter9Messages = getLinter9Messages(testCase);
 
-          testCase.errors.forEach((expectation, index) => {
-            const [linter8Message, linter9Message] = [
-              linter8Messages[index],
-              linter9Messages[index],
-            ];
+          if (typeof testCase.errors === 'number') {
+            assert.equal(linter8Messages.length, testCase.errors);
+            assert.equal(linter9Messages.length, testCase.errors);
+          } else {
+            assert.equal(linter9Messages.length, linter8Messages.length);
 
-            for (const message of [linter8Message, linter9Message]) {
-              assert.equal(message.message, expectation.message);
-              assert.equal(message.line, expectation.line);
-              assert.equal(message.column, expectation.column);
-              assert.equal(message.ruleId, 'test/candidate');
+            testCase.errors.forEach((expectation, index) => {
+              const [linter8Message, linter9Message] = [
+                linter8Messages[index],
+                linter9Messages[index],
+              ];
 
-              if (expectation.endColumn !== undefined) {
-                assert.equal(message.endColumn, expectation.endColumn);
+              for (const message of [linter8Message, linter9Message]) {
+                assert.equal(message.message, expectation.message);
+                assert.equal(message.line, expectation.line);
+                assert.equal(message.column, expectation.column);
+                assert.equal(message.ruleId, 'test/candidate');
+
+                if (expectation.endColumn !== undefined) {
+                  assert.equal(message.endColumn, expectation.endColumn);
+                }
               }
-            }
-          });
-        }
+            });
+          }
+        });
       }
     });
   }
