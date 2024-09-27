@@ -20,7 +20,7 @@
 import { visit } from '../../../src/linter/visitors';
 import path from 'path';
 import { parseTypeScriptSourceFile } from '../../tools/helpers';
-import { childrenOf } from '../../../src/rules';
+import { childrenOf } from '../../../src/rules/main';
 
 describe('visitor', () => {
   describe('visit', () => {

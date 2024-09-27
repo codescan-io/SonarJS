@@ -20,7 +20,7 @@
 import path from 'path';
 import { getContext, setContext, toUnixPath } from '@sonar/shared';
 import { analyzeProject, clearTSConfigs, ProjectAnalysisInput, RuleConfig } from '@sonar/jsts';
-import { searchFiles, File } from '../../src/rules';
+import { searchFiles, File } from '../../src/rules/main';
 
 const defaultRules: RuleConfig[] = [
   { key: 'S4621', configurations: [], fileTypeTarget: ['MAIN'] },

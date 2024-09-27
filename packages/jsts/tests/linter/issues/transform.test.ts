@@ -21,7 +21,7 @@ import { Linter } from 'eslint';
 import path from 'path';
 import { parseJavaScriptSourceFile, parseTypeScriptSourceFile } from '../../tools';
 import { transformMessages } from '../../../src/linter/issues';
-import { rules } from '../../../src/rules/index';
+import { rules } from '../../../src/rules/main';
 
 describe('transformMessages', () => {
   it('should transform ESLint messages', async () => {

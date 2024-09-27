@@ -21,7 +21,7 @@ import { Linter, SourceCode } from 'eslint';
 import { convertMessage } from '../../../src/linter/issues';
 import path from 'path';
 import { parseJavaScriptSourceFile } from '../../tools';
-import { S1116 } from '../../../src/rules/decorated';
+import { S1116 } from '../../../src/rules/main/decorated';
 
 describe('convertMessage', () => {
   it('should convert an ESLint message into a Sonar issue', async () => {

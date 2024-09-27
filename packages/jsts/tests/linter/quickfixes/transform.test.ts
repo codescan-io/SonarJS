@@ -22,7 +22,7 @@ import path from 'path';
 import { rule as noExclusiveTests } from '../../../src/rules/S6426';
 import { transformFixes } from '../../../src/linter/quickfixes';
 import { parseJavaScriptSourceFile } from '../../tools/helpers';
-import { rules as allRules } from '../../../src/rules/index';
+import { rules as allRules } from '../../../src/rules/main';
 
 describe('transformFixes', () => {
   it('should transform an ESLint core fix', async () => {
