@@ -1,4 +1,4 @@
-sources=["main/**/*.ts"]
+sources=["main/**/!(*.test).ts"]
 reporters=[
   "html",
   "text"

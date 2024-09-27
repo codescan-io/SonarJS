@@ -35,15 +35,12 @@ const messages = {
 export const S4328: Rule.RuleModule = {
   meta: generateMeta(meta as Rule.RuleMetaData, { messages, schema }),
   create(context: Rule.RuleContext) {
-    // @ts-ignore
-    // todo: I put this deliberately to demonstrate that the ESLint9 test successfully detects the problem
-    context.getSource();
-
     // we need to find all the npm manifests from the directory of the analyzed file to the context working directory
     const dependencies = getDependencies(context.filename, context.cwd);
 
     const whitelist = (context.options as FromSchema<typeof schema>)[0]?.whitelist || [];
     const program = context.sourceCode.parserServices?.program;
+
     let options: ts.CompilerOptions, host: ts.ModuleResolutionHost;
     if (program) {
       options = program?.getCompilerOptions();
@@ -102,6 +99,7 @@ function raiseOnImplicitImport(
   context: Rule.RuleContext,
 ) {
   const moduleName = module.value;
+
   if (typeof moduleName !== 'string') {
     return;
   }
@@ -137,6 +135,7 @@ function raiseOnImplicitImport(
   if (host && options) {
     // check if Typescript can resolve path aliases and 'baseDir'-based import
     const resolved = ts.resolveModuleName(moduleName, filename, options, host);
+
     if (resolved?.resolvedModule && !resolved.resolvedModule.isExternalLibraryImport) {
       return;
     }
