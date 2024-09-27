@@ -28,7 +28,7 @@ import { analyzeWithWatchProgram } from './analyzeWithWatchProgram';
 import { analyzeWithoutProgram } from './analyzeWithoutProgram';
 import { initializeLinter } from '../../linter';
 import { TSCONFIG_JSON, setTSConfigs, getTSConfigsIterator } from '../../program';
-import { File, searchFiles } from '../../rules/helpers';
+import { File, searchFiles } from '../../../src/rules/main/helpers';
 import { toUnixPath } from '@sonar/shared';
 
 /**

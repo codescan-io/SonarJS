@@ -1,4 +1,4 @@
-const { rules } = require('../lib/jsts/src/rules/index');
+const { rules } = require('../lib/jsts/src/rules/main');
 const { writeFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { mkdirpSync } = require('mkdirp');

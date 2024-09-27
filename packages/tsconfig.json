@@ -4,10 +4,8 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "lib": ["ES2021", "dom"],
-    "declaration": true,
     "outDir": "../lib",
     "strict": true,
-    "sourceMap": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "allowSyntheticDefaultImports": true,
@@ -17,23 +15,14 @@
     "useUnknownInCatchVariables": false,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["../node_modules/@types", "../typings"],
-    "baseUrl": ".",
     "paths": {
-      "@sonar/css": ["css/src"],
-      "@sonar/html": ["html/src"],
-      "@sonar/jsts": ["jsts/src"],
-      "@sonar/shared": ["shared/src"],
-      "@sonar/yaml": ["yaml/src"]
-    }
-  },
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
+      "@sonar/css": ["./css/src"],
+      "@sonar/html": ["./html/src"],
+      "@sonar/jsts": ["./jsts/src"],
+      "@sonar/shared": ["./shared/src"],
+      "@sonar/yaml": ["./yaml/src"]
     },
-    {
-      "path": "./tsconfig.test.json"
-    }
-  ],
-  "files": [],
-  "include": []
+    "allowJs": true
+  },
+  "include": ["server.ts", "bridge/src/worker.js"]
 }

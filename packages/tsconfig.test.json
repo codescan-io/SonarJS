@@ -7,11 +7,6 @@
     "composite": true,
     "resolveJsonModule": true
   },
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    }
-  ],
   "include": [
     "*/tests",
     "*/src/rules/tools",
