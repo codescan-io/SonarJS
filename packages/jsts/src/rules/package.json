@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-sonarjs",
-  "version": "2.0.3",
+  "version": "2.0.2",
   "main": "./lib/plugin.js",
   "exports": "./lib/plugin.js",
   "description": "SonarJS rules for ESLint",
