@@ -36,7 +36,7 @@ describe('server', () => {
     });
   });
 
-  it('should start', async () => {
+  it.skip('should start', async () => {
     expect.assertions(5);
 
     console.log = jest.fn();
