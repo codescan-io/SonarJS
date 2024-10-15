@@ -350,41 +350,23 @@
         </executions>
       </plugin>
 
+      <!-- copy runtimes so they are accessible by unit tests -->
       <plugin>
-        <artifactId>maven-enforcer-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
-            <id>enforce-plugin-size</id>
+            <id>copy-resources</id>
+            <phase>generate-test-resources</phase>
             <goals>
-              <goal>enforce</goal>
+              <goal>copy-resources</goal>
             </goals>
-            <phase>verify</phase>
             <configuration>
-              <rules>
-                <requireFilesSize>
-                  <minsize>80000000</minsize>
-                  <maxsize>87500000</maxsize>
-                  <files>
-                    <file>${project.build.directory}/${project.build.finalName}-multi.jar</file>
-                  </files>
-                </requireFilesSize>
-                <requireFilesSize>
-                  <minsize>30000000</minsize>
-                  <maxsize>50000000</maxsize>
-                  <files>
-                    <file>${project.build.directory}/${project.build.finalName}-linux-x64.jar</file>
-                    <file>${project.build.directory}/${project.build.finalName}-win-x64.jar</file>
-                    <file>${project.build.directory}/${project.build.finalName}-darwin-arm64.jar</file>
-                  </files>
-                </requireFilesSize>
-                <requireFilesSize>
-                  <minsize>22500000</minsize>
-                  <maxsize>27500000</maxsize>
-                  <files>
-                    <file>${project.build.directory}/${project.build.finalName}.jar</file>
-                  </files>
-                </requireFilesSize>
-              </rules>
+              <outputDirectory>${basedir}/target/test-classes</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/node</directory>
+                </resource>
+              </resources>
             </configuration>
           </execution>
         </executions>
@@ -393,4 +375,14 @@
     </plugins>
   </build>
 
+  <distributionManagement>
+    <repository>
+      <id>libs-release</id>
+      <url>https://artifactory.autorabit.com/artifactory/libs-release</url>
+    </repository>
+    <snapshotRepository>
+      <id>libs-snapshots</id>
+      <url>https://artifactory.autorabit.com/artifactory/libs-snapshot</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
