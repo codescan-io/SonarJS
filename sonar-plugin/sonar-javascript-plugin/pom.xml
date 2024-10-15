@@ -321,46 +321,6 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-plugin-size</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <phase>verify</phase>
-            <configuration>
-              <rules>
-                <requireFilesSize>
-                  <minsize>75000000</minsize>
-                  <maxsize>85000000</maxsize>
-                  <files>
-                    <file>${project.build.directory}/${project.build.finalName}-multi.jar</file>
-                  </files>
-                </requireFilesSize>
-                <requireFilesSize>
-                  <minsize>30000000</minsize>
-                  <maxsize>50000000</maxsize>
-                  <files>
-                    <file>${project.build.directory}/${project.build.finalName}-linux-x64.jar</file>
-                    <file>${project.build.directory}/${project.build.finalName}-win-x64.jar</file>
-                    <file>${project.build.directory}/${project.build.finalName}-darwin-arm64.jar</file>
-                  </files>
-                </requireFilesSize>
-                <requireFilesSize>
-                  <minsize>19000000</minsize>
-                  <maxsize>25000000</maxsize>
-                  <files>
-                    <file>${project.build.directory}/${project.build.finalName}.jar</file>
-                  </files>
-                </requireFilesSize>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <!-- copy runtimes so they are accessible by unit tests -->
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
@@ -386,4 +346,14 @@
     </plugins>
   </build>
 
+  <distributionManagement>
+    <repository>
+      <id>libs-release</id>
+      <url>https://artifactory.autorabit.com/artifactory/libs-release</url>
+    </repository>
+    <snapshotRepository>
+      <id>libs-snapshots</id>
+      <url>https://artifactory.autorabit.com/artifactory/libs-snapshot</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
