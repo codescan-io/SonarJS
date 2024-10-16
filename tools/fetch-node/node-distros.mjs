@@ -17,7 +17,7 @@
 export const NODE_VERSION = 'v22.11.0';
 
 const NODE_ORG_URL = `https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}`;
-const NODE_ARTIFACTORY_URL = `https://repox.jfrog.io/artifactory/nodejs-dist/${NODE_VERSION}/node-${NODE_VERSION}`;
+const NODE_ARTIFACTORY_URL = `https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}`;
 
 // alpine builds are not officially supported. this is the URL the official docker alpine uses
 // https://github.com/nodejs/docker-node/blob/15cd6b44e0284c459de7763b45e3b16972c0716e/22/alpine3.20/Dockerfile#L23
