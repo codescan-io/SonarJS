@@ -1,7 +1,7 @@
 export const NODE_VERSION = 'v20.9.0';
 
 const NODE_ORG_URL = `https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}`;
-const NODE_ARTIFACTORY_URL = `https://repox.jfrog.io/artifactory/nodejs-dist/${NODE_VERSION}/node-${NODE_VERSION}`;
+const NODE_ARTIFACTORY_URL = `https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}`;
 
 /**
  * Node.js runtimes distributions
