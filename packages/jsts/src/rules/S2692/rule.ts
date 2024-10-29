@@ -47,6 +47,7 @@ export const rule: Rule.RuleModule = {
         if (
           expression.operator === '>' &&
           isZero(expression.right) &&
+          expression.left.type !== 'PrivateIdentifier' &&
           isArrayIndexOfCall(expression.left, services)
         ) {
           context.report({ node, messageId: 'considerIncludes' });

@@ -52,7 +52,12 @@ export const rule: Rule.RuleModule = {
       return {
         "BinaryExpression[operator='in']": (node: estree.Node) => {
           const { left, right } = node as estree.BinaryExpression;
-          if (isArray(right, services) && !prototypeProperty(left) && !isNumber(left, services)) {
+          if (
+            isArray(right, services) &&
+            left.type !== 'PrivateIdentifier' &&
+            !prototypeProperty(left) &&
+            !isNumber(left, services)
+          ) {
             const leftText = context.sourceCode.getText(left);
             const rightText = context.sourceCode.getText(right);
             context.report({

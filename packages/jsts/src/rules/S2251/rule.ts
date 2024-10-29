@@ -124,7 +124,11 @@ class ForLoopIncrement {
       (rhs.operator === '+' || rhs.operator === '-')
     ) {
       let incrementDirection = directionFromValue(rhs.right);
-      if (incrementDirection !== null && isSameIdentifier(rhs.left, lhs)) {
+      if (
+        incrementDirection !== null &&
+        rhs.left.type === 'Identifier' &&
+        isSameIdentifier(rhs.left, lhs)
+      ) {
         incrementDirection = rhs.operator === '-' ? -incrementDirection : incrementDirection;
         return ForLoopIncrement.increment(assignmentExpression, lhs, incrementDirection);
       }
@@ -160,7 +164,10 @@ function getWrongDirection(
   if (condition.type !== 'BinaryExpression') {
     return 0;
   }
-  if (isSameIdentifier(condition.left, forLoopIncrement.identifier)) {
+  if (
+    condition.left.type === 'Identifier' &&
+    isSameIdentifier(condition.left, forLoopIncrement.identifier)
+  ) {
     if (condition.operator === '<' || condition.operator === '<=') {
       return -1;
     }
