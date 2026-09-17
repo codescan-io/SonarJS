@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.sonarsource.javascript</groupId>
+    <artifactId>javascript</artifactId>
+    <version>10.18.0-CODESCAN</version>
+  </parent>
+
+  <artifactId>javascript-its</artifactId>
+  <name>JavaScript :: IT</name>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>perf</module>
+    <module>plugin</module>
+    <module>ruling</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <configuration>
+          <mapping>
+            <js>SLASHSTAR_STYLE</js>
+            <mjs>SLASHSTAR_STYLE</mjs>
+            <cjs>SLASHSTAR_STYLE</cjs>
+            <ts>SLASHSTAR_STYLE</ts>
+          </mapping>
+          <licenseSets>
+            <licenseSet>
+              <includes>
+                <include>**/*.java</include>
+                <include>**/*.js</include>
+                <include>**/*.cjs</include>
+                <include>**/*.mjs</include>
+                <include>**/*.ts</include>
+              </includes>
+              <excludes>
+                <!-- Files -->
+                <exclude>**/SonarJsPerfBenchmark.java</exclude>
+                <exclude>**/bundle/dist/rules.js</exclude>
+                <!-- Fixtures -->
+                <exclude>**/fixtures/**/*</exclude>
+                <!-- Projects -->
+                <exclude>**/projects/**/*</exclude>
+                <!-- Submodules -->
+                <exclude>**/sources/**/*</exclude>
+                <!-- Resources -->
+                <exclude>**/src/test/resources/**/*</exclude>
+              </excludes>
+            </licenseSet>
+          </licenseSets>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
