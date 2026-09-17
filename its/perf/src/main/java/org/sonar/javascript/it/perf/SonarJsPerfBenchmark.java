@@ -49,6 +49,7 @@ import com.sonar.orchestrator.http.HttpMethod;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
+import com.sonar.orchestrator.locator.Locators;
 import com.sonar.orchestrator.locator.MavenLocation;
 import java.io.File;
 import java.io.IOException;
@@ -251,7 +252,8 @@ public class SonarJsPerfBenchmark {
       .setProperty("sonar.inclusions", "**/*.js,**/*.ts,**/.vue")
       .setProperty("sonar.token", token);
 
-    return new BuildRunner(Configuration.createEnv()).run(null, build);
+    var configuration = Configuration.createEnv();
+    return new BuildRunner(configuration, new Locators(configuration)).run(null, build);
   }
 
   private static String generateDefaultAdminToken(Orchestrator orchestrator) {
